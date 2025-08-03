@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Clone</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --netflix-red: #e50914;
+            --netflix-dark: #141414;
+            --netflix-light: #f3f3f3;
+        }
+        
+        body {
+            background-color: var(--netflix-dark);
+            color: white;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            padding: 20px 0;
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .navbar.scrolled {
+            background-color: var(--netflix-dark) !important;
+            padding: 10px 0;
+        }
+        
+        .navbar-brand img {
+            height: 40px;
+        }
+        
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+        
+        .nav-link:hover {
+            color: #b3b3b3 !important;
+        }
+        
+        .btn-netflix {
+            background-color: var(--netflix-red);
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            padding: 8px 20px;
+            border: none;
+        }
+        
+        .btn-netflix:hover {
+            background-color: #f40612;
+            color: white;
+        }
+        
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 500px;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('https://image.tmdb.org/t/p/original/9dKCd55IuTT5QRs989m9Qlb7d2B.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+            margin-left: 50px;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+        
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .hero-buttons .btn {
+            margin-right: 15px;
+            font-size: 1.1rem;
+            padding: 10px 25px;
+        }
+        
+        .btn-outline-light {
+            background-color: rgba(109, 109, 110, 0.7);
+            border: none;
+        }
+        
+        .btn-outline-light:hover {
+            background-color: rgba(109, 109, 110, 0.4);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 20px 0 15px 50px;
+        }
+        
+        .carousel-container {
+            position: relative;
+            padding: 0 50px;
+        }
+        
+        .carousel-inner {
+            overflow: visible;
+        }
+        
+        .carousel-item {
+            transition: transform 0.5s ease;
+        }
+        
+        .movie-card {
+            position: relative;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .movie-card:hover {
+            transform: scale(1.1);
+            z-index: 1;
+        }
+        
+        .movie-card img {
+            width: 100%;
+            border-radius: 4px;
+        }
+        
+        .footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 50px 0;
+            margin-top: 50px;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .footer-links a {
+            color: #757575;
+            margin: 0 15px 10px 0;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover {
+            color: #b3b3b3;
+        }
+        
+        .footer-social {
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .footer-social a {
+            color: #757575;
+            margin: 0 10px;
+            font-size: 1.5rem;
+        }
+        
+        .footer-social a:hover {
+            color: #b3b3b3;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-content {
+                margin-left: 20px;
+                padding-right: 20px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-description {
+                font-size: 1rem;
+            }
+            
+            .section-title, .carousel-container {
+                padding-left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Séries</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Filmes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Lançamentos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Minha Lista</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <button class="btn btn-netflix">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Stranger Things</h1>
+            <p class="hero-description">
+                Quando um garoto desaparece, a cidade toda participa nas buscas. Mas o que encontram são segredos, forças sobrenaturais e uma menina.
+            </p>
+            <div class="hero-buttons">
+                <button class="btn btn-netflix">
+                    <i class="fas fa-play"></i> Assistir Agora
+                </button>
+                <button class="btn btn-outline-light">
+                    <i class="fas fa-info-circle"></i> Mais Informações
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Movies Carousel -->
+    <div class="container-fluid">
+        <h2 class="section-title">Em Alta</h2>
+        <div class="carousel-container">
+            <div id="trendingCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="d-flex">
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/9dKCd55IuTT5QRs989m9Qlb7d2B.jpg" alt="Stranger Things">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg" alt="The Avengers">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" alt="Spider-Man">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Loki">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6XYQTmWNpEY0L2dpyL12xUnWkXe.jpg" alt="The Witcher">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/34nDCQZwaEvsy4QOo8rpAKsm6k6.jpg" alt="Money Heist">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="d-flex">
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6fVXEpfWYWlJxpo3BdCw3QfIylB.jpg" alt="The Queen's Gambit">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/bZGAX8oMDm3Mo5i0ZPKh9G2OcaO.jpg" alt="The Mandalorian">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6kbAMLteGO8yyewYau6bJ683sw7.jpg" alt="Black Widow">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6EdKBY3JtBSQb1QYVY4eQKJvLQX.jpg" alt="Dune">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/1uegRjvt0q0i2MLhD2eAuRXDnQm.jpg" alt="Squid Game">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/34nDCQZwaEvsy4QOo8rpAKsm6k6.jpg" alt="Money Heist">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#trendingCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#trendingCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Recommended Section -->
+        <h2 class="section-title">Recomendados para Você</h2>
+        <div class="carousel-container">
+            <div id="recommendedCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="d-flex">
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6fVXEpfWYWlJxpo3BdCw3QfIylB.jpg" alt="The Queen's Gambit">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/bZGAX8oMDm3Mo5i0ZPKh9G2OcaO.jpg" alt="The Mandalorian">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6kbAMLteGO8yyewYau6bJ683sw7.jpg" alt="Black Widow">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6EdKBY3JtBSQb1QYVY4eQKJvLQX.jpg" alt="Dune">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/1uegRjvt0q0i2MLhD2eAuRXDnQm.jpg" alt="Squid Game">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/34nDCQZwaEvsy4QOo8rpAKsm6k6.jpg" alt="Money Heist">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="d-flex">
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/9dKCd55IuTT5QRs989m9Qlb7d2B.jpg" alt="Stranger Things">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg" alt="The Avengers">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" alt="Spider-Man">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Loki">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6XYQTmWNpEY0L2dpyL12xUnWkXe.jpg" alt="The Witcher">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/34nDCQZwaEvsy4QOo8rpAKsm6k6.jpg" alt="Money Heist">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#recommendedCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#recommendedCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- New Releases Section -->
+        <h2 class="section-title">Lançamentos</h2>
+        <div class="carousel-container">
+            <div id="newReleasesCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="d-flex">
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6EdKBY3JtBSQb1QYVY4eQKJvLQX.jpg" alt="Dune">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/1uegRjvt0q0i2MLhD2eAuRXDnQm.jpg" alt="Squid Game">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6kbAMLteGO8yyewYau6bJ683sw7.jpg" alt="Black Widow">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/bZGAX8oMDm3Mo5i0ZPKh9G2OcaO.jpg" alt="The Mandalorian">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6fVXEpfWYWlJxpo3BdCw3QfIylB.jpg" alt="The Queen's Gambit">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/34nDCQZwaEvsy4QOo8rpAKsm6k6.jpg" alt="Money Heist">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="d-flex">
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Loki">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/6XYQTmWNpEY0L2dpyL12xUnWkXe.jpg" alt="The Witcher">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg" alt="Spider-Man">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg" alt="The Avengers">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/9dKCd55IuTT5QRs989m9Qlb7d2B.jpg" alt="Stranger Things">
+                            </div>
+                            <div class="movie-card">
+                                <img src="https://image.tmdb.org/t/p/w500/34nDCQZwaEvsy4QOo8rpAKsm6k6.jpg" alt="Money Heist">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#newReleasesCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#newReleasesCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-globe"></i> Português</a>
+                <a href="#">Termos de Uso</a>
+                <a href="#">Privacidade</a>
+                <a href="#">Preferências de cookies</a>
+                <a href="#">Informações corporativas</a>
+                <a href="#">Entre em contato</a>
+                <a href="#">Teste de velocidade</a>
+                <a href="#">Avisos legais</a>
+                <a href="#">Só na Netflix</a>
+                <a href="#">Central de Ajuda</a>
+                <a href="#">Conta</a>
+                <a href="#">Imprensa</a>
+                <a href="#">Comprar cartão pré-pago</a>
+                <a href="#">Formas de assistir</a>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p class="text-center text-muted mt-4">© 2023 Netflix Clone. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Initialize carousels
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousels = document.querySelectorAll('.carousel');
+            carousels.forEach(carousel => {
+                new bootstrap.Carousel(carousel, {
+                    interval: 5000,
+                    wrap: true
+                });
+            });
+        });
+    </script>
+</body>
+</html>
